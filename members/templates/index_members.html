@@ -1,0 +1,277 @@
+{% extends "header2.html" %}
+<!-- Jangan lupa untuk menambahkan load static pada file base.html kita -->
+{% load static %}
+
+{% block title %}
+<title>Members | Panel Menu</title>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-12 px-4 bg-white py-5" style="min-height: calc(100vh - 75px);">
+  <div class="card shadow-sm">
+    <div class="card-header bg-light text-secondary text-center py-2 sidebar-heading">
+      Panel Members
+    </div>
+    <div class="card-body">
+      <div class="row py-3">
+        <div class="col-sm-6">
+
+          {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            <div class="alert alert-warning alert-dismissible fade show py-1" role="alert">
+              <strong>Mantap!</strong> {{ message }}.
+              <button type="button" class="close py-1" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-sm-6 text-right">
+        <div class="dropdown py-0">
+          <a class="px-0 sidebar-heading justify-content-between align-items-center mb-1 text-muted pb-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Urutkan Member
+          </a>
+          <div class="dropdown-menu dropdown-menu-right px-3 py-3 my-1" aria-labelledby="navbarDropdown">
+
+            {% if request.GET.orderby == '0' %}
+            <button class="btn-sm btn-primary form-control sidebar-heading" disabled>
+              <span data-feather="arrow-up-circle"></span>
+              <span>TERBARU</span>
+            </button>
+            {% else %}
+            <button onclick="location.href='{% url 'members' %}?orderby=0'" class="btn-sm btn-outline-primary form-control sidebar-heading">
+              <span data-feather="arrow-up-circle"></span>
+              <span>TERBARU</span>
+            </button>
+            {% endif %}
+
+            {% if request.GET.orderby == '1' %}
+            <button class="btn-sm btn-primary form-control mt-3 sidebar-heading" disabled>
+              <span data-feather="arrow-down-circle"></span>
+              <span>TERLAMA</span>
+            </button>
+            {% else %}
+            <button onclick="location.href='{% url 'members' %}?orderby=1'" class="btn-sm btn-outline-primary form-control mt-3 sidebar-heading">
+              <span data-feather="arrow-down-circle"></span>
+              <span>TERLAMA</span>
+            </button>
+            {% endif %}
+          </div>
+        </div>
+        </div>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col" class="text-center">Username</th>
+            <th scope="col" class="text-center w-25">E-Mail</th>
+            <th scope="col" class="text-center w-25">Tanggal Registrasi</th>
+            <th scope="col" class="text-center">Jumlah Postingan</th>
+            <th scope="col" class="text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for member in members %}
+          <tr>
+            <th scope="row" class="text-center align-middle">
+              {{ forloop.counter0|add:members.start_index }}
+            </th>
+            <td class="text-center align-middle">
+              <a class="font-weight-bold align-middle" data-toggle="modal" data-target="#profile">
+                {{ member.users_id__username }}
+              </a>
+
+              <div id="profile" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content border-0">
+                    <div class="modal-body p-0">
+                      <div class="card border-0 p-sm-3 p-2 justify-content-center">
+                        <div class="card-header pb-0 bg-white border-0 ">
+                          <div class="row">
+                            <div class="col ml-auto"><button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div>
+                          </div>
+                        </div>
+                        <div class="card-body px-sm-4 mb-2 pt-1 pb-0">
+                          <div class="row d-flex align-items-center justify-content-center h-100">
+                            <div class="col">
+                              <div class="form-group">
+                                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                                  <span>Username</span>
+                                  <span class="font-weight-bold text-dark">{{ member.users_id__username }}</span>
+                                </h6>
+                              </div>
+                              <div class="form-group">
+                                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                                  <span>Email</span>
+                                  <span class="font-weight-bold text-dark">{{ member.users_id__email }}</span>
+                                </h6>
+                              </div>
+                              <div class="form-group">
+                                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                                  <span>Nama Depan</span>
+                                  <span class="font-weight-bold text-dark">{{ users.users_id__first_name }}</span>
+                                </h6>
+                              </div>
+                              <div class="form-group">
+                                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                                  <span>Nama Belakang</span>
+                                  <span class="font-weight-bold text-dark">{{ users.users_id__last_name }}</span>
+                                </h6>
+                              </div>
+                              <div class="form-group">
+                                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                                  <span>Tanggal Registrasi</span>
+                                  <span class="font-weight-bold text-dark">{{ member.users_id__date_joined }}</span>
+                                </h6>
+                              </div>
+                              <div class="form-group">
+                                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                                  <span>Terakhir Di Update</span>
+                                  <span class="font-weight-bold text-dark">{{ member.updated_at }}</span>
+                                </h6>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="text-center align-middle">
+              {{ member.users_id__email }}
+            </td>
+            <td class="text-center align-middle">
+              {{ member.users_id__date_joined }}
+            </td>
+            <td class="text-center align-middle">
+              {% if member.total == None %}
+              Kosong
+              {% else %}
+              <a class="font-weight-bold" href="{% url 'home' %}?author={{ member.id }}">
+                {{ member.total }}
+              </a>
+              {% endif %}
+            </td>
+            <td class="text-center align-middle">
+              <button class="btn-sm btn-outline-danger form-control sidebar-heading d-flex justify-content-between align-items-center px-4" data-toggle="modal" data-target="#my-modal">
+                <span data-feather="trash-2"></span>
+                <span> Hapus</span>
+              </button>
+
+              <div id="my-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content border-0">
+                    <div class="modal-body p-0">
+                      <div class="card border-0 p-sm-3 p-2 justify-content-center">
+                        <div class="card-header pb-0 bg-white border-0 ">
+                          <div class="row">
+                            <div class="col ml-auto"><button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div>
+                          </div>
+                          <p class="font-weight-bold mb-2">Apakah kamu yakin ?</p>
+                          <p class="text-muted ">Perintah ini akan menghapus seluruh hal terkait member ini!</p>
+                        </div>
+                        <div class="card-body px-sm-4 mb-2 pt-1 pb-0">
+                          <div class="row justify-content-end no-gutters">
+                            <div class="col-auto"><button type="button" class="btn btn-light text-muted" data-dismiss="modal">Batal</button></div>
+                            <div class="col-auto">
+                              <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input name="delete_id" style="display:none" value="{{ member.id }}">
+                                <button type="submit" class="btn btn-danger mx-4">
+                                  Lanjut
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer py-3">
+      {% if members.has_other_pages %}
+      <nav class="d-flex justify-content-center py-1" aria-label="...">
+        <ul class="pagination">
+          {% if members.has_previous %}
+          <li class="page-item">
+            {% if 'orderby' in request.GET %}
+            <a class="page-link" href="{% url 'members' %}?orderby={{ request.GET.orderby }}&page={{ members.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+            {% else %}
+            <a class="page-link" href="?page={{ members.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+            {% endif %}
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+          {% endif %}
+
+          {% for i in members.paginator.page_range %}
+          {% if members.number == i %}
+          <li class="page-item active">
+            <a class="page-link">{{ i }} <span class="sr-only">(current)</span></a>
+          </li>
+
+          {% else %}
+
+          {% if 'orderby' in request.GET %}
+          <li class="page-item"><a class="page-link" href="{% url 'members' %}?orderby={{ request.GET.orderby }}&page={{ i }}">{{ i }}</a></li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+
+          {% if members.has_next %}
+          <li class="page-item">
+            {% if 'orderby' in request.GET %}
+            <a class="page-link" href="{% url 'members' %}?orderby={{ request.GET.orderby }}&page={{ members.next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+            {% else %}
+            <a class="page-link" href="?page={{ members.next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+            {% endif %}
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

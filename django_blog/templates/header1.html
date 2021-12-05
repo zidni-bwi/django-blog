@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+
+  {% block title %}
+  <!-- Judul -->
+  {% endblock %}
+
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/dropzone/dist/dropzone.css" />
+  <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/dropzone"></script>
+  <script src="https://unpkg.com/cropperjs"></script>
+
+</head>
+
+<body class="bg-light">
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <ul class="col-md-1">
+    </ul>
+    <a class="navbar-brand mr-0 px-4 shadow-none" href="/">Blog Sederhana</a>
+    <ul class="navbar-nav mx-auto">
+    </ul>
+
+    {% if user.is_authenticated and user.is_superuser != 1 %}
+    <ul class="navbar-nav navbar-brand py-0 mx-1 px-0 mx-0 border-0 shadow-none">
+      <li class="nav-item dropdown px-2 py-1">
+        <a class="nav-link text-light" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span data-feather="bell"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">
+
+          {% for notification in notifications %}
+          {% if notification.likes_id %}
+          {% if notification.status == '0' %}
+          <form method="POST" enctype="multipart/form-data" id="form-like">
+            {% csrf_token %}
+            <input name="action" type="hidden" value="notice">
+            <input name="notification_id" type="hidden" value="{{ notification.id }}">
+            <a class="dropdown-item sidebar-heading font-weight-bold" onclick="document.getElementById('form-like').submit()">{{ notification.likes_id__users_id__username }} Menyukai Postingan Anda</a>
+          </form>
+          {% else %}
+          <a class="dropdown-item sidebar-heading" href="{% url 'detail_posts' notification.likes_id__posts_id %}">{{ notification.likes_id__users_id__username }} Menyukai Postingan Anda</a>
+          {% endif %}
+          {% elif notification.comments_id %}
+          {% if notification.status == '0' %}
+          <form method="POST" enctype="multipart/form-data" id="form-comment">
+            {% csrf_token %}
+            <input name="action" type="hidden" value="notice">
+            <input name="notification_id" type="hidden" value="{{ notification.id }}">
+            <a class="dropdown-item sidebar-heading font-weight-bold" onclick="document.getElementById('form-comment').submit()">{{ notification.comments_id__users_id__username }} Mengomentari Postingan Anda</a>
+          </form>
+          {% else %}
+          <a class="dropdown-item sidebar-heading" href="{% url 'detail_posts' notification.comments_id__posts_id %}">{{ notification.comments_id__users_id__username }} Mengomentari Postingan Anda</a>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav navbar-brand py-0 px-0 mx-0 shadow-none">
+      <li class="nav-item dropdown px-4 py-1">
+        <a class="nav-link text-light text-uppercase px-0 dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ user.get_username }}
+        </a>
+        <div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item sidebar-heading" href="{% url 'dashboard' %}">Dashboard</a>
+          <a class="dropdown-item sidebar-heading" href="{% url 'index_accounts' %}">Pengaturan Profile</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item sidebar-heading" href="{% url 'logout' %}">Log Out</a>
+        </div>
+      </li>
+    </ul>
+
+    {% else %}
+    <ul class="navbar-nav navbar-brand py-0 px-0 mx-0 shadow-none">
+      <li class="nav-item px-4 py-2">
+        <button type="button" class="btn btn-sm btn-outline-light font-weight-bold mr-2" onclick="location.href='{% url 'login' %}'">Login</button>
+        <button type="button" class="btn btn-sm btn-outline-primary font-weight-bold" onclick="location.href='{% url 'register' %}'">Registrasi</button>
+      </li>
+    </ul>
+    {% endif %}
+
+    <ul class="col-md-1">
+    </ul>
+  </nav>
+
+  <!-- Konten -->
+  <main class="col-md-12">
+    <div class="row justify-content-center">
+      <div class="col-md-10 bg-white border-right border-left px-0 shadow-sm min-vh-100">
+        {% block content %}
+        <!-- Isi Konten -->
+        {% endblock %}
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+
+<script>feather.replace()</script>

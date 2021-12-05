@@ -1,0 +1,196 @@
+{% extends "header2.html" %}
+<!-- Jangan lupa untuk menambahkan load static pada file base.html kita -->
+{% load static %}
+
+{% block title %}
+<title>Dashboard | Panel Menu</title>
+{% endblock %}
+
+{% block content %}
+<div class="col-md-12 bg-white py-5 px-0" style="min-height: calc(100vh - 75px);">
+  {% if user.is_superuser %}
+  <div class="card-deck px-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Total Member</div>
+      <div class="card-body text-center">
+        <h1 class="card-title">{{ total_members }}</h1>
+      </div>
+      <div class="card-footer py-1">
+        <small class="text-muted">Registrasi Terakhir: {{ total_members_ext.date_joined }}</small>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Total Postingan</div>
+      <div class="card-body text-center">
+        <h1 class="card-title">{{ total_posts }}</h1>
+      </div>
+      <div class="card-footer py-1">
+        <small class="text-muted">Postingan Terakhir: {{ total_posts_ext.created_at }}</small>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Member Dengan Postingan Terbanyak</div>
+      <div class="card-body">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Username</th>
+              <th scope="col">Jumlah Postingan</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for most_post in most_posts %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><a >{{ most_post.author_id__username }}</a></td>
+              <td>{{ most_post.total }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <h1 class="card-title">{{ most_posts.author_id__username }}</h1>
+        <h1 class="card-title">{{ most_posts.created_at }}</h1>
+      </div>
+    </div>
+  </div>
+  <div class="card-deck pt-4 px-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Postingan Dengan Like Terbanyak</div>
+      <div class="card-body">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Judul</th>
+              <th scope="col">Jumlah Likes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for most_like in most_likes %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><a href="{% url 'detail_posts' most_like.posts_id %}">{{ most_like.posts_id__title }}</a></td>
+              <td>{{ most_like.total }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Postingan Dengan Komentar Terbanyak</div>
+      <div class="card-body">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Judul</th>
+              <th scope="col">Jumlah Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for most_comment in most_comments %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><a href="{% url 'detail_posts' most_comment.posts_id %}">{{ most_comment.posts_id__title }}</a></td>
+              <td>{{ most_comment.total }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="card-deck px-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Total Postingan</div>
+      <div class="card-body">
+        <h1 class="card-title">{{ total_posts }}</h1>
+      </div>
+      <div class="card-footer py-1">
+        <small class="text-muted">Posting Terakhir: {{ total_posts_ext.created_at }}</small>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Total Like Diperoleh</div>
+      <div class="card-body">
+        <h1 class="card-title">{{ total_likes }}</h1>
+      </div>
+      <div class="card-footer py-1">
+        <small class="text-muted">Likes Terakhir: {{ total_likes_ext.created_at }}</small>
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Total Komentar Diperoleh</div>
+      <div class="card-body">
+        <h1 class="card-title">{{ total_comments }}</h1>
+      </div>
+      <div class="card-footer py-1">
+        <small class="text-muted">Komentar Terakhir: {{ total_comments_ext.created_at }}</small>
+      </div>
+    </div>
+  </div>
+  <div class="card-deck pt-4 px-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Postingan Dengan Like Terbanyak</div>
+      <div class="card-body">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Judul</th>
+              <th scope="col">Jumlah Likes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for most_like in most_likes %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><a href="{% url 'detail_posts' most_like.posts_id %}">{{ most_like.posts_id__title }}</a></td>
+              <td>{{ most_like.total }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer py-1">
+        {% with most_likes|first as posted %}
+        <small class="text-muted"># 1 Posted {{ posted.posts_id__created_at }}</small>
+        {% endwith %}
+      </div>
+    </div>
+    <div class="card shadow-sm">
+      <div class="card-header bg-light text-secondary py-1">Postingan Dengan Komentar Terbanyak</div>
+      <div class="card-body">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Judul</th>
+              <th scope="col">Jumlah Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for most_comment in most_comments %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><a href="{% url 'detail_posts' most_comment.posts_id %}">{{ most_comment.posts_id__title }}</a></td>
+              <td>{{ most_comment.total }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer py-1">
+        {% with most_comments|first as posted %}
+        <small class="text-muted"># 1 Posted {{ posted.posts_id__created_at }}</small>
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

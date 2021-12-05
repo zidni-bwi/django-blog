@@ -1,0 +1,90 @@
+{% extends "header2.html" %}
+<!-- Jangan lupa untuk menambahkan load static pada file base.html kita -->
+{% block title %}
+<title>Profile | Pengaturan</title>
+{% endblock %}
+
+{% block content %}
+<style>
+  .fill {
+    min-height: 100%;
+    height: 100%;
+  }
+
+</style>
+
+<!-- Button trigger modal -->
+
+<div class="col-md-12 bg-white px-4 py-5" style="min-height: calc(100vh - 75px);">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-light text-secondary text-center py-2 sidebar-heading">
+          Pengaturan Profile
+        </div>
+        <div class="card-body">
+          {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            <div class="alert alert-warning alert-dismissible fade show py-1" role="alert">
+              <strong>Mantap!</strong> {{ message }}.
+              <button type="button" class="close py-1" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+          <div class="row d-flex align-items-center justify-content-center h-100">
+            <div class="col">
+              <div class="form-group">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                  <span>Nama</span>
+                  <span class="font-weight-bold text-dark">{{ users.username }}</span>
+                </h6>
+              </div>
+              <div class="form-group">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                  <span>Email</span>
+                  <span class="font-weight-bold text-dark">{{ users.email }}</span>
+                </h6>
+              </div>
+              <div class="form-group">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                  <span>Tanggal Registrasi</span>
+                  <span class="font-weight-bold text-dark">{{ users.date_joined }}</span>
+                </h6>
+              </div>
+              <div class="form-group">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                  <span>Terakhir Di Update</span>
+                  <span class="font-weight-bold text-dark">{{ profile.updated_at }}</span>
+                </h6>
+              </div>
+              <div class="form-group">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center py-2 text-muted">
+                  <span>Password</span>
+                  <span class="font-weight-bold text-dark"><a href="{% url 'edit_password' %}" >Ubah Password</a></span>
+                </h6>
+              </div>
+            </div>
+            <div class="col">
+              <img src="{{ profile.photo }}" class="card-img-top card-img-top rounded-circle w-50 img-responsive center-block d-block mx-auto" alt="gambar" >
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col text-center">
+              <button type="button" class="form-control btn btn-sm btn-outline-primary" onclick="window.location.href='/edit_accounts'">
+                Edit Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

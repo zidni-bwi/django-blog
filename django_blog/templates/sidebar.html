@@ -1,0 +1,69 @@
+{% block sidebar %}
+{% url 'dashboard' as dashboard %}
+{% url 'members' as members %}
+{% url 'index_posts' as index_posts %}
+
+  <h6 class="sidebar-heading align-items-center text-light font-weight-bold">
+    Panel Menu
+  </h6>
+
+  {% if request.path == dashboard %}
+  <button onclick="location.href='/dashboard'" class="btn btn-light form-control sidebar-heading d-flex justify-content-between align-items-center px-4 mt-3">
+    <span data-feather="home"></span>
+    <span>Dashboard</span>
+  </button>
+  {% else %}
+  <button onclick="location.href='/dashboard'" class="btn btn-outline-light form-control sidebar-heading d-flex justify-content-between align-items-center px-4 mt-3">
+    <span data-feather="home"></span>
+    <span>Dashboard</span>
+  </button>
+  {% endif %}
+
+  {% if user.is_superuser %}
+
+  {% if request.path == members %}
+  <button onclick="location.href='/members'" class="btn btn-light form-control sidebar-heading d-flex justify-content-between align-items-center px-4 mt-3">
+    <span data-feather="file-text"></span>
+    <span>Members</span>
+  </button>
+  {% else %}
+  <button onclick="location.href='/members'" class="btn btn-outline-light form-control sidebar-heading d-flex justify-content-between align-items-center px-4 mt-3">
+    <span data-feather="file-text"></span>
+    <span>Members</span>
+  </button>
+  {% endif %}
+
+  {% else %}
+
+  {% if request.path == index_posts or '/add_posts' in request.get_full_path or '/edit_posts' in request.get_full_path %}
+  <button onclick="location.href='/posts'" class="btn btn-light form-control sidebar-heading d-flex justify-content-between align-items-center px-4 mt-3">
+    <span data-feather="file-text"></span>
+    <span>Postingan</span>
+  </button>
+  {% else %}
+  <button onclick="location.href='/posts'" class="btn btn-outline-light form-control sidebar-heading d-flex justify-content-between align-items-center px-4 mt-3">
+    <span data-feather="file-text"></span>
+    <span>Postingan</span>
+  </button>
+  {% endif %}
+
+  {% endif %}
+
+  <h6 class="sidebar-heading align-items-center text-light font-weight-bold mt-5">
+    Pengaturan
+  </h6>
+
+  {% if '/accounts' in request.get_full_path or '/edit_accounts' in request.get_full_path or '/edit_password' in request.get_full_path %}
+  <button onclick="location.href='/accounts'" class="btn btn-light form-control sidebar-heading d-flex justify-content-between align-items-center px-4 mt-3">
+    <span data-feather="user"></span>
+    <span>Accounts</span>
+  </button>
+  {% else %}
+  <button onclick="location.href='/accounts'" class="btn btn-outline-light form-control sidebar-heading d-flex justify-content-between align-items-center px-4 mt-3">
+    <span data-feather="user"></span>
+    <span>Accounts</span>
+  </button>
+  {% endif %}
+
+
+  {% endblock %}
