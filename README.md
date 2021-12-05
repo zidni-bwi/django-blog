@@ -11,3 +11,10 @@ Manage Member
 Notifikasi
 Komentar, Like, dsbg
 Management Profile
+
+$ ./manage.py makemigrations
+
+$ ./manage.py runserver
+
+
+Nama database: djblog
